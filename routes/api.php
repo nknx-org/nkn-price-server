@@ -13,6 +13,16 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+
+
+// WHAT DO WE WANT?
+//
+// Query current price of quote:
+// /price?quote=NKN&currency=USD,ETH
+
+// Query historical price of quote:
+// /history?quote=NKN&currency=USD,ETH&aggregate=days
+
+Route::get('price', 'QuoteController@price');
+Route::get('history', 'QuoteController@history');

@@ -7,6 +7,9 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Exception\RequestException;
 
+use App\Quote;
+use App\Price;
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -36,13 +39,22 @@ class Kernel extends ConsoleKernel
             ];
             try {
                 $client = new GuzzleHttpClient();
+                //Query for USD and set up the main Quote
                 $apiRequest = $client->Get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=NKN&convert=USD', $requestContent);
-                $response = json_decode($apiRequest->getBody());
-                dd($response->data->NKN->quote);
-                foreach($response["data"]["NKN"]["quote"] as $price){
-                    dd($price);
-                }
-                dd($response);
+                $response = json_decode($apiRequest->getBody(),true);
+                $quote = new Quote($response["data"]["NKN"]);
+                $quote->save();
+
+                $prices = [];
+                $prices[] = new Price(array_merge($response["data"]["NKN"]["quote"]["USD"],["currency" => "USD"]));
+
+                //Query for ETH
+                $apiRequest = $client->Get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=NKN&convert=ETH', $requestContent);
+                $response = json_decode($apiRequest->getBody(),true);
+                $prices[] = new Price(array_merge($response["data"]["NKN"]["quote"]["ETH"],["currency" => "ETH"]));
+
+                $quote->prices()->saveMany($prices);
+
             } catch (RequestException $re) {
                 throw $re;
             }
