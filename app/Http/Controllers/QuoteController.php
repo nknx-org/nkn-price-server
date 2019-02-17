@@ -24,8 +24,8 @@ class QuoteController extends Controller
 	 *
 	 * Returns chosen quotes and the current prices of the chosen currency
 	 *
-     * @queryParam quote The symbols you want to get returned Example: NKN
-     * @queryParam currency The currencies you want to get Example: USD,ETH
+     * @queryParam quote required The symbols you want to get returned Example: NKN
+     * @queryParam currency required The currencies you want to get Example: USD,ETH
      *
 	 */
     public function price(Request $request){
@@ -68,9 +68,9 @@ class QuoteController extends Controller
 	 *
 	 * Returns chosen quotes and the history prices of the chosen currency based on the aggregation level
 	 *
-     * @queryParam quote The symbols you want to get returned Example: NKN
-     * @queryParam currency The currencies you want to get Example: USD,ETH
-     * @queryParam aggregate The currencies you want to get Example: days
+     * @queryParam quote required The symbols you want to get returned Example: NKN
+     * @queryParam currency required The currencies you want to get Example: USD,ETH
+     * @queryParam aggregate required The currencies you want to get Example: days
      *
 	 */
     public function history(Request $request){
