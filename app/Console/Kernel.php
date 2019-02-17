@@ -59,7 +59,7 @@ class Kernel extends ConsoleKernel
                 throw $re;
             }
 
-        })->everyMinute()->name('FetchCMCAPI')->withoutOverlapping();
+        })->everyTenMinutes()->name('FetchCMCAPI');
     }
 
     /**
