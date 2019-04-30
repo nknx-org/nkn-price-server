@@ -7,6 +7,8 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Exception\RequestException;
 
+use Carbon\Carbon;
+
 use App\Quote;
 use App\Price;
 
@@ -60,6 +62,11 @@ class Kernel extends ConsoleKernel
             }
 
         })->everyTenMinutes()->name('FetchCMCAPI');
+
+        $schedule->call(function () {
+            Quote::where('created_at', '<', Carbon::now()->subMonth(3))->delete();
+            Price::where('created_at', '<', Carbon::now()->subMonth(3))->delete();
+        })->monthly()->name('CleanUpPrices')->withoutOverlapping();
     }
 
     /**
