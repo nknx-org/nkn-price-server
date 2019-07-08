@@ -32,17 +32,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            $requestContent = [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/json',
-                    'X-CMC_PRO_API_KEY'=> config('cmcapi.cmc_api_key')
-                ]
-            ];
             try {
                 $client = new GuzzleHttpClient();
                 //Query for USD and set up the main Quote
-                $apiRequest = $client->Get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=NKN&convert=USD', $requestContent);
+                $apiRequest = $client->Get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=NKN&convert=USD&CMC_PRO_API_KEY='.config('cmcapi.cmc_api_key'));
                 $response = json_decode($apiRequest->getBody(),true);
                 $quote = new Quote($response["data"]["NKN"]);
                 $quote->save();
@@ -51,7 +44,7 @@ class Kernel extends ConsoleKernel
                 $prices[] = new Price(array_merge($response["data"]["NKN"]["quote"]["USD"],["currency" => "USD"]));
 
                 //Query for ETH
-                $apiRequest = $client->Get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=NKN&convert=ETH', $requestContent);
+                $apiRequest = $client->Get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=NKN&convert=ETH&CMC_PRO_API_KEY='.config('cmcapi.cmc_api_key'));
                 $response = json_decode($apiRequest->getBody(),true);
                 $prices[] = new Price(array_merge($response["data"]["NKN"]["quote"]["ETH"],["currency" => "ETH"]));
 
