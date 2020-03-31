@@ -54,7 +54,7 @@ class Kernel extends ConsoleKernel
                 throw $re;
             }
 
-        })->everyTenMinutes()->name('FetchCMCAPI');
+        })->everyThirtyMinutes()->name('FetchCMCAPI');
 
         $schedule->call(function () {
             Quote::where('created_at', '<', Carbon::now()->subMonth(3))->delete();
