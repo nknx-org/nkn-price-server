@@ -38,7 +38,6 @@ class Kernel extends ConsoleKernel
                 $apiRequest = $client->Get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=NKN&convert=USD&CMC_PRO_API_KEY='.config('cmcapi.cmc_api_key'));
                 $response = json_decode($apiRequest->getBody(),true);
                 $quote = new Quote($response["data"]["NKN"]);
-                $quote->save();
 
                 $prices = [];
                 $prices[] = new Price(array_merge($response["data"]["NKN"]["quote"]["USD"],["currency" => "USD"]));
@@ -48,7 +47,12 @@ class Kernel extends ConsoleKernel
                 $response = json_decode($apiRequest->getBody(),true);
                 $prices[] = new Price(array_merge($response["data"]["NKN"]["quote"]["ETH"],["currency" => "ETH"]));
 
-                $quote->prices()->saveMany($prices);
+                if($prices){
+                    $quote->save();
+                    $quote->prices()->saveMany($prices);
+                }
+
+
 
             } catch (RequestException $re) {
                 throw $re;
