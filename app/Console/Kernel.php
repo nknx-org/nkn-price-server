@@ -47,7 +47,7 @@ class Kernel extends ConsoleKernel
                 $response = json_decode($apiRequest->getBody(),true);
                 $prices[] = new Price(array_merge($response["data"]["NKN"]["quote"]["ETH"],["currency" => "ETH"]));
 
-                if($prices){
+                if(!empty($prices)){
                     $quote->save();
                     $quote->prices()->saveMany($prices);
                 }
