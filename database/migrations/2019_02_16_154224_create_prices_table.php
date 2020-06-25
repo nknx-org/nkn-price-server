@@ -18,9 +18,9 @@ class CreatePricesTable extends Migration
             $table->string('currency')->index();
             $table->float('price', 20, 8);
             $table->float('volume_24h', 20, 8);
-            $table->float('percent_change_1h', 20, 8);
-            $table->float('percent_change_24h', 20, 8);
-            $table->float('percent_change_7d', 20, 8);
+            $table->float('percent_change_1h', 20, 8)->nullable();
+            $table->float('percent_change_24h', 20, 8)->nullable();
+            $table->float('percent_change_7d', 20, 8)->nullable();
             $table->float('market_cap', 20, 8);
             $table->unsignedInteger('quote_id');
             $table->timestamps();
